@@ -1,0 +1,76 @@
+구글 >알려진 포트번호 > TCP/UDP의 포트 목록
+조장은 진짜 컴퓨터에서 실행해서 조원들이 연결할수 있게 해야함
+
+10-3은 RDBMS용으로 구현
+0. 실제PC에 Oracle express -> 설치(system/oracle)
+1. IP주소 확인 : CMD - IPCONFIF
+-> 192.168.111.103 : 포트번호(내선번호)
+2. 방화벽 오픈 : 1521(오라클용)
+ -> 실행(찾기) -> WF.MSC -> 고급 보안이 포함된 Windows Defender 방화벽 > 인바운드 규칙(왼쪽) ->우클릭 -> 새규칙
+-> 포트 -> TCP(T) ,1521 -> 연결허용 -> 도메인,개인,공용체크
+-> 이름: Oracle Port Open  설명: 오라클 db용 포트 열기 -> 마침
+-> 새로고침(reload:바로적용)
+
+3.포트 오픈 확인 -> cmd -> netstat -an
+10-1변경 setting -> 6144 6기가로
+10-1에서는 오른쪽 + 아이콘 누르고 Open perspective > Database development
+왼쪽 Database Connections > 오른쪽 클릭 > New 
+> new connection profile > Oracle >Oracle(System) > 시계 + 아이콘 (오른쪽)
+Name/Type 
+
+받은 ojdbc6.jar > 10-1:  C:\Program Files\Java\jdk-17\lib 로 복사붙여넣기
+
+sid로 변경 이름: orcl
+Catalog: DBA로 변경
+
+-> Test Connection (fail뜰 경우 )
+10-3으로 가서 탐색기 -> c 드라이브 프로그램 파일 oracle
+
+진짜 pc에다가 오라클 설치
+192.168.0.63 
+링크-로컬 IPv6 주소의 IP는 컴퓨터 실행할때마다 변경되니 고정시킬것
+
+
+네트워크 설정 열기(오른쪽하단) > 어댑터 옵션 변경  > 속성
+> 이더넷 2 > 속성 >이미지 참조 > IPCONFIG(다른사람이랑 중복되면안됨)
+
+
+10-1로 가서 SID이름 소문자 xe로 변경
+> 이클립스 > file > java project 생성 > 탭 Libraries > Modulepath > add external jars..
+
+이름: jdbcsrc.sql
+Type: Oracle_11, Name: Oracle(System), Database: xe
+
+4. 테스트 계정 생성
+cmd > sqlplus system/oracle
+grant resource, connect to jdbctest ;		결과: Grant succeeded.
+alter user jdbctest default tablespace users;	결과: User altered.
+alter user jdbctest temporary tablespace temp;	결과: User altered.
+exit 두번해서 빠져나가기
+
+이클립스 > jdbcsrc.sql
+실행: alt + x
+
+create table emp(
+num number(5) primary key,
+name varchar2(16) not null,
+dept varchar2(16),
+score number(7,2));  --emp 테이블 생성
+
+--테이블 잘못 생성시 삭제
+drop table emp;
+
+create sequence emp_seq increment by 1 start with 1 nocache nocycle; --자동번호 생성
+drop sequence emp_seq ; -- 자동번호 생성객체 삭제
+
+--실행은 블럭설정 alt + x 
+insert into emp(num, name, dept, score) values(emp_seq.nextval, '이름1', '부서1', 75.3);
+insert into emp(num, name, dept, score) values(emp_seq.nextval, '이름2', '부서2', 75.3);
+insert into emp(num, name, dept, score) values(emp_seq.nextval, '이름3', '부서3', 75.3);
+insert into emp(num, name, dept, score) values(emp_seq.nextval, '이름4', '부서4', 75.3);
+insert into emp(num, name, dept, score) values(emp_seq.nextval, '이름5', '부서5', 75.3);
+insert into emp(num, name, dept, score) values(emp_seq.nextval, '이름6', '부서6', 75.3);
+
+select * from emp;
+
+
