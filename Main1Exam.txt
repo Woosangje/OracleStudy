@@ -1,0 +1,52 @@
+package jdbcProject;
+
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class Main1Exam {
+
+	public static void main(String[] args) throws SQLException {
+		// jdbc 테스트용 실행 코드
+		JDBCTest jt = new JDBCTest(); //객체 생성
+		boolean run = true; //실행용 코드
+		Scanner in = new Scanner(System.in);
+		
+		while(run) {
+			System.out.println("--------------------------------");
+			System.out.println("----emp 테이블에 오신 것을 환영합니다.---");
+			System.out.println("1. 전체보기 | 2. 입력(stmt) | 3. 입력(pstmt) | 4. 수정 | 5. 삭제 ");
+			System.out.println(">>>");
+			int select = in.nextInt();
+			switch(select) {
+			case 1 :
+				jt.selectEmp(); // 전체 정보 보기
+				break;
+			case 2 :
+				System.out.println("이름을 입력하세요");
+				System.out.println(">>>");
+				String name = in.next();
+				System.out.println("부서를 입력하세요");
+				System.out.println(">>>");
+				String dept = in.next();
+				System.out.println("입사점수를 입력하세요(소수점2까지)");
+				double score = in.nextDouble();
+				jt.insertEmp1(name, dept, score);
+				
+				break;
+			case 3 :
+				break;
+			case 4 :
+				break;
+			case 5 :
+				break;
+			default :
+				System.out.println("1~5까지만 입력 바랍니다.");
+				break;
+			}
+			
+		}
+		jt.selectEmp(); //전체 정보 보기
+
+	}
+
+}

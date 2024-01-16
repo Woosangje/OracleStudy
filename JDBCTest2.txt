@@ -1,0 +1,87 @@
+package jdbcProject;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class JDBCTest {
+	//필드
+	//생성자
+	//메서드	
+	public void selectEmp() throws SQLException { // Read를 담당하는 메서드
+		
+		Connection conn = null ; //db연결을 담당하는 타입
+		Statement stmt = null  ; //정적쿼리를 담당하는 타입
+		PreparedStatement pstmt = null ; //동적쿼리를 담당하는 타입
+		ResultSet rs = null ; // 쿼리 결과 표를 담당하는 타입
+		
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver"); //오라클 드라이버 연결
+			conn = DriverManager.getConnection
+					("jdbc:oracle:thin:@192.168.0.200:1521:xe","jdbctest", "jdbctest");
+			// 드라이버와 같이 사용될 url, id, pw를 연결 정보 생성
+			
+			stmt = conn.createStatement() ; //쿼리문 생성용 준비작업
+			rs = stmt.executeQuery("select * from emp order by num asc"); 
+			//쿼리 실행 후 resultset표에 저장
+			
+			
+			System.out.println("사원번호\t 이름\t 부서\t 입사점수");
+			System.out.println("---------------------------------------------------");
+			while(rs.next()) { //rs.next() 다음행이 있으면 true, 없으면 false
+				System.out.print(rs.getInt(1)+"\t"); //num필드값 int타입으로 출력
+				System.out.print(rs.getString(2)+"\t"); //name 필드값 String 타입으로
+				System.out.print(rs.getString(3)+"\t"); //dept 필드값 String 타입으로
+				System.out.println(rs.getDouble(4));   //Score 필드값 Double 타입으로
+			}
+			
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally { //항상실행 블럭
+			rs.close(); // resultset 닫기
+			stmt.close(); // 쿼리문 닫기
+			conn.close(); // 연결 닫기
+		}//try문 입력 종료
+		
+	}  //selectEmp() 메서드 종료
+	
+	public void insertEmp1(String name, String dept, double score) throws SQLException {
+		Connection conn = null;
+		Statement stmt = null;
+		int n ; // 결과값이 정수로 나옴(1개의 행이 입력되었습니다.)
+		
+		try { //일반 실행문
+			Class.forName("oracle.jdbc.driver.OracleDriver");//오라클 드라이버 연결
+			conn = DriverManager.getConnection
+					("jdbc:oracle:thin:@192.168.0.200:1521:xe","jdbctest", "jdbctest");
+			//200 자기 아이피로 수정
+			// 드라이버와 같이 사용될 url, id, pw를 연결 정보 생성
+			
+			String sql = "insert into emp(num, name, dept, score) "
+					+ "values(emp_seq.nextval, '" + name + "','" + dept + "','" + score +"')";
+					  //values(emp_seq.nextval, 'name','dept','score')
+			stmt = conn.createStatement() ; //쿼리문 객체 준비
+			n = stmt.executeUpdate(sql); // 쿼리문 실행 후 결과를 int n에 넣는다.
+			if(n > 0) {
+				System.out.println(n + "행 데이터를 추가하였습니다.\n");
+				conn.commit(); // 영구 저장
+			}			
+			
+			
+		} catch (ClassNotFoundException e) { //클래스가 없을 때 예외처리
+			// TODO Auto-generated catch block
+			e.printStackTrace();  //로그 출력
+		} finally {
+			stmt.close();
+			conn.close();
+		}
+		
+	} //insertEmp1() 정적쿼리문으로 삽입 테스트
+	
+}
