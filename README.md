@@ -36,3 +36,9 @@ test 실행시 fail 뜰경우 10-3 > WF.MSC 검색 > 인바운드 규칙에 orac
 ★JDBCTest.java 는 외우거나 복사해서 가지고 다녀라</br>
 
 pstmt의 n = pstmt.executeUpdate(sql);에서 sql빼라</br>
+
+0117</br>
+★테이블에있는 자료 확인하는법</br>
+이클립스 > DataSourceExplorer > xe > Schemas > BOARDTEST > Tables > BOARD > Columns</br>
+★Board.java & BoardDTO.java 제일 중요한 내용</br>
+항상 pk 로 중복없이 값을 가져와야한다.</br>
