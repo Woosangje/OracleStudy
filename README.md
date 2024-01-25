@@ -42,3 +42,5 @@ pstmt의 n = pstmt.executeUpdate(sql);에서 sql빼라</br>
 이클립스 > DataSourceExplorer > xe > Schemas > BOARDTEST > Tables > BOARD > Columns</br>
 ★Board.java & BoardDTO.java 제일 중요한 내용</br>
 항상 pk 로 중복없이 값을 가져와야한다.</br>
+
+dao,dto 메뉴와 연결하기 토요일 오후 10시까지
